@@ -17,14 +17,14 @@ import javax.persistence.MappedSuperclass;
 public abstract class UserDateAuditing extends DateAuditing {
 
   @CreatedBy
-  @Column(name = "created_by")
+  @Column(name = "created_by", updatable = false)
   private Long createdBy;
 
   @LastModifiedBy
-  @Column(name = "last_modified_by")
+  @Column(name = "last_modified_by", nullable = false)
   private Long lastModifiedBy;
 
-  @Column(name = "delete_flag", columnDefinition = "boolean default false")
-  private Boolean deleteFlag;
+  @Column(name = "delete_flag")
+  private Boolean deleteFlag = Boolean.FALSE;
 
 }

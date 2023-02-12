@@ -22,7 +22,7 @@ public class VerificationToken {
 
   @Type(type = "uuid-char")
   @Column(updatable = false, unique = true, nullable = false, columnDefinition = "CHAR(36)")
-  private String token;
+  private UUID  token;
 
   @Column(nullable = false)
   private Date expirationTime;
@@ -31,7 +31,7 @@ public class VerificationToken {
   @JoinColumn(name = "account_id", nullable = false, foreignKey = @ForeignKey(name = "FK_USER_TOKEN"))
   private User user;
 
-  public VerificationToken(User user, String token) {
+  public VerificationToken(User user, UUID token) {
     super();
     this.user = user;
     this.token = token;

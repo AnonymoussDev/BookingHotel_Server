@@ -1,12 +1,12 @@
 package com.bookinghotel.security;
 
+import com.bookinghotel.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 public class UserPrincipal implements UserDetails {
 
@@ -45,13 +45,13 @@ public class UserPrincipal implements UserDetails {
     }
   }
 
-//	public static UserPrincipal create(User user) {
-//		List<GrantedAuthority> authorities = user.getRoles().stream()
-//				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-//
-//		return new UserPrincipal(user.getId(), user.getFirstName(), user.getLastName(),
-//				user.getEmail(), user.getPhone(), user.getPassword(), authorities);
-//	}
+  public static UserPrincipal create(User user) {
+    List<GrantedAuthority> authorities = new LinkedList<>();
+    authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
+
+    return new UserPrincipal(user.getId(), user.getFirstName(), user.getLastName(),
+        user.getEmail(), user.getPhoneNumber(), user.getPassword(), authorities);
+  }
 
   public Long getId() {
     return id;
