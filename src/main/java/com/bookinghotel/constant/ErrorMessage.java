@@ -22,6 +22,7 @@ public class ErrorMessage {
     public static final String ERR_INCORRECT_AUTHENTICATION = "Username or password incorrect";
     public static final String ERR_DUPLICATE_EMAIL = "Email is already taken";
     public static final String ERR_DUPLICATE_PASSWORD = "The new password must be different from the old password";
+    public static final String ERR_ACCOUNT_NOT_ACTIVATED = "This account is not activated yet";
   }
 
   public static class User {

@@ -105,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
     checkVerificationToken(verificationToken);
     try {
       User user = verificationToken.getUser();
-      user.setStatus(CommonConstant.TRUE);
+      user.setEnabled(CommonConstant.TRUE);
       userRepository.save(user);
       verificationTokenRepository.delete(verificationToken);
       return new CommonResponseDTO(CommonConstant.TRUE, CommonMessage.SIGNUP_SUCCESS);
@@ -118,6 +118,7 @@ public class AuthServiceImpl implements AuthService {
   public CommonResponseDTO forgotPassword(String email) {
     Optional<User> user = userRepository.findByEmail(email);
     checkNotFoundUserByEmail(user, email);
+    checkAccountNotActivated(user.get());
 
     //generate uuid token
     UUID token = UUID.randomUUID();
@@ -174,6 +175,12 @@ public class AuthServiceImpl implements AuthService {
       if ((verificationToken.getExpirationTime().getTime() - cal.getTime().getTime()) <= 0) {
         throw new InvalidException(ErrorMessage.EXPIRED_TOKEN);
       }
+    }
+  }
+
+  private void checkAccountNotActivated(User user) {
+    if(user.getEnabled().equals(Boolean.FALSE)) {
+      throw new InvalidException(ErrorMessage.Auth.ERR_ACCOUNT_NOT_ACTIVATED);
     }
   }
 
