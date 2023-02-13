@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Validated
@@ -41,7 +40,7 @@ public class AuthController {
 
   @ApiOperation("(2) API verify signup")
   @PostMapping(UrlConstant.Auth.VERIFY_SIGNUP)
-  public ResponseEntity<?> FormVerificationTokenSignUp(@RequestParam("token") UUID token) {
+  public ResponseEntity<?> FormVerificationTokenSignUp(@RequestParam("token") String token) {
     return VsResponseUtil.ok(authService.verifySignUp(token));
   }
 
@@ -54,13 +53,13 @@ public class AuthController {
 
   @ApiOperation("(2) API verify token forgot password")
   @PostMapping(UrlConstant.Auth.VERIFY_FORGOT_PASS)
-  public ResponseEntity<?> verifyTokenResetPass(@RequestParam(name = "token") UUID token) {
+  public ResponseEntity<?> verifyTokenResetPass(@RequestParam(name = "token") String token) {
     return VsResponseUtil.ok(authService.verifyPasswordResetToken(token));
   }
 
   @ApiOperation("(3) API confirm forgot password")
   @PostMapping(UrlConstant.Auth.CONFIRM_FORGOT_PASS)
-  public ResponseEntity<?> forgotPassword(@RequestParam(name = "token") UUID token,
+  public ResponseEntity<?> forgotPassword(@RequestParam(name = "token") String token,
                                           @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{8,}$",
                                               message = ErrorMessage.INVALID_FORMAT_PASSWORD)
                                           @RequestParam(name = "password") String newPassword) {

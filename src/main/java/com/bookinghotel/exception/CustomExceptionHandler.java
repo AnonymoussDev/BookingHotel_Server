@@ -75,9 +75,15 @@ public class CustomExceptionHandler {
     return VsResponseUtil.error(HttpStatus.NOT_FOUND, ex.getMessage());
   }
 
+  @ExceptionHandler(UnauthorizedException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public ResponseEntity<RestData<?>> handleUnauthorizedException(UnauthorizedException ex, WebRequest req) {
+    return VsResponseUtil.error(HttpStatus.UNAUTHORIZED, ex.getMessage());
+  }
+
   @ExceptionHandler(UploadImageException.class)
   @ResponseStatus(HttpStatus.BAD_GATEWAY)
-  public ResponseEntity<RestData<?>> handleUploadImageException(DuplicateException ex, WebRequest req) {
+  public ResponseEntity<RestData<?>> handleUploadImageException(UploadImageException ex, WebRequest req) {
     return VsResponseUtil.error(HttpStatus.BAD_GATEWAY, ex.getMessage());
   }
 

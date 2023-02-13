@@ -11,10 +11,7 @@ import com.bookinghotel.dto.common.CommonResponseDTO;
 import com.bookinghotel.dto.common.DataMailDTO;
 import com.bookinghotel.entity.User;
 import com.bookinghotel.entity.VerificationToken;
-import com.bookinghotel.exception.DuplicateException;
-import com.bookinghotel.exception.InternalServerException;
-import com.bookinghotel.exception.InvalidException;
-import com.bookinghotel.exception.NotFoundException;
+import com.bookinghotel.exception.*;
 import com.bookinghotel.mapper.UserMapper;
 import com.bookinghotel.repository.RoleRepository;
 import com.bookinghotel.repository.UserRepository;
@@ -25,6 +22,7 @@ import com.bookinghotel.util.SendMailUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,8 +60,10 @@ public class AuthServiceImpl implements AuthService {
 
       String jwt = jwtTokenProvider.generateToken(authentication);
       return new AuthenticationResponseDTO(CommonConstant.BEARER_TOKEN, jwt, null);
+    } catch (DisabledException e) {
+      throw new UnauthorizedException(ErrorMessage.Auth.ERR_ACCOUNT_NOT_ENABLED);
     } catch (BadCredentialsException e) {
-      throw new InvalidException(ErrorMessage.Auth.ERR_INCORRECT_AUTHENTICATION);
+      throw new UnauthorizedException(ErrorMessage.Auth.ERR_INCORRECT_AUTHENTICATION);
     }
   }
 
@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
 
     //generate uuid token
     UUID token = UUID.randomUUID();
-    VerificationToken verificationToken = new VerificationToken(user, token);
+    VerificationToken verificationToken = new VerificationToken(user, token.toString());
     verificationTokenRepository.save(verificationToken);
 
     //set data mail
@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthService {
     dataMailDTO.setSubject(CommonMessage.SUBJECT_REGISTER);
     Map<String, Object> properties = new HashMap<>();
     properties.put("name", userCreateDTO.getLastName() + " " + userCreateDTO.getFirstName());
-    properties.put("token", token);
+    properties.put("token", token.toString());
 
     try {
       sendMail.sendEmailWithHTML(dataMailDTO, CommonMessage.SIGNUP_TEMPLATE, properties);
@@ -100,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public CommonResponseDTO verifySignUp(UUID token) {
+  public CommonResponseDTO verifySignUp(String token) {
     VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
     checkVerificationToken(verificationToken);
     try {
@@ -118,11 +118,11 @@ public class AuthServiceImpl implements AuthService {
   public CommonResponseDTO forgotPassword(String email) {
     Optional<User> user = userRepository.findByEmail(email);
     checkNotFoundUserByEmail(user, email);
-    checkAccountNotActivated(user.get());
+    checkAccountNotEnabled(user.get());
 
     //generate uuid token
     UUID token = UUID.randomUUID();
-    VerificationToken verificationToken = new VerificationToken(user.get(), token);
+    VerificationToken verificationToken = new VerificationToken(user.get(), token.toString());
     verificationTokenRepository.save(verificationToken);
 
     //set data mail
@@ -131,7 +131,7 @@ public class AuthServiceImpl implements AuthService {
     dataMailDTO.setSubject(CommonMessage.SUBJECT_FORGOT_PASS);
     Map<String, Object> properties = new HashMap<>();
     properties.put("name", user.get().getLastName() + " " + user.get().getFirstName());
-    properties.put("token", token);
+    properties.put("token", token.toString());
 
     try {
       sendMail.sendEmailWithHTML(dataMailDTO, CommonMessage.FORGOT_PASSWORD_TEMPLATE, properties);
@@ -142,14 +142,14 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public CommonResponseDTO verifyPasswordResetToken(UUID token) {
+  public CommonResponseDTO verifyPasswordResetToken(String token) {
     VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
     checkVerificationToken(verificationToken);
     return new CommonResponseDTO(CommonConstant.TRUE, CommonConstant.EMPTY_STRING);
   }
 
   @Override
-  public CommonResponseDTO confirmForgotPassword(UUID token, String newPassword) {
+  public CommonResponseDTO confirmForgotPassword(String token, String newPassword) {
     VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
     checkVerificationToken(verificationToken);
 
@@ -178,9 +178,9 @@ public class AuthServiceImpl implements AuthService {
     }
   }
 
-  private void checkAccountNotActivated(User user) {
-    if(user.getEnabled().equals(Boolean.FALSE)) {
-      throw new InvalidException(ErrorMessage.Auth.ERR_ACCOUNT_NOT_ACTIVATED);
+  private void checkAccountNotEnabled(User user) {
+    if (user.getEnabled().equals(Boolean.FALSE)) {
+      throw new UnauthorizedException(ErrorMessage.Auth.ERR_ACCOUNT_NOT_ENABLED);
     }
   }
 
