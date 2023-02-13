@@ -76,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
     User user = userMapper.toUser(userCreateDTO);
     user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
     user.setRole(roleRepository.findByRoleName(RoleEnum.USER.getValue()));
+    user.setStatus(CommonConstant.FALSE);
     userRepository.save(user);
 
     //generate uuid token
@@ -89,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
     dataMailDTO.setSubject(CommonMessage.SUBJECT_REGISTER);
     Map<String, Object> properties = new HashMap<>();
     properties.put("name", userCreateDTO.getLastName() + " " + userCreateDTO.getFirstName());
-    properties.put("token", token.toString());
+    properties.put("token", token);
 
     try {
       sendMail.sendEmailWithHTML(dataMailDTO, CommonMessage.SIGNUP_TEMPLATE, properties);
@@ -130,7 +131,7 @@ public class AuthServiceImpl implements AuthService {
     dataMailDTO.setSubject(CommonMessage.SUBJECT_FORGOT_PASS);
     Map<String, Object> properties = new HashMap<>();
     properties.put("name", user.get().getLastName() + " " + user.get().getFirstName());
-    properties.put("token", token.toString());
+    properties.put("token", token);
 
     try {
       sendMail.sendEmailWithHTML(dataMailDTO, CommonMessage.FORGOT_PASSWORD_TEMPLATE, properties);

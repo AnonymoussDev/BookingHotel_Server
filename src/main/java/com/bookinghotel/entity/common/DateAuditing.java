@@ -18,11 +18,11 @@ import java.time.Instant;
 public abstract class DateAuditing {
 
   @CreatedDate
-  @Column(name = "created_date", nullable = false, updatable = false)
+  @Column(nullable = false , updatable = false)
   private Instant createdDate;
 
   @LastModifiedDate
-  @Column(name = "last_modified_date", nullable = false)
+  @Column(nullable = false )
   private Instant lastModifiedDate;
 
 }

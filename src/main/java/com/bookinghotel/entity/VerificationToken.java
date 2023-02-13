@@ -22,13 +22,13 @@ public class VerificationToken {
 
   @Type(type = "uuid-char")
   @Column(updatable = false, unique = true, nullable = false, columnDefinition = "CHAR(36)")
-  private UUID  token;
+  private UUID token;
 
   @Column(nullable = false)
   private Date expirationTime;
 
   @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "account_id", nullable = false, foreignKey = @ForeignKey(name = "FK_USER_TOKEN"))
+  @JoinColumn(name = "user_id",  nullable = false, foreignKey = @ForeignKey(name = "FK_USER_TOKEN"))
   private User user;
 
   public VerificationToken(User user, UUID token) {

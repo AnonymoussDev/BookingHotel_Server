@@ -39,7 +39,7 @@ public class BookingHotelApplication {
       }
 
       if (userRepository.count() == 0) {
-        User admin = new User(null, "bloomi.hit@gmail.com", "0387753709",
+        User admin = new User(null, "abc@gmail.com", "0123456789",
             passwordEncoder.encode("admin"), "Admin", "Admin", "Nam", "2001-1-1",
             "Hà Nội", Boolean.TRUE, roleRepository.findByRoleName(RoleEnum.ADMIN.getValue()), null);
         userRepository.save(admin);
