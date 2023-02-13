@@ -76,7 +76,6 @@ public class AuthServiceImpl implements AuthService {
     User user = userMapper.toUser(userCreateDTO);
     user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
     user.setRole(roleRepository.findByRoleName(RoleEnum.USER.getValue()));
-    user.setStatus(CommonConstant.FALSE);
     userRepository.save(user);
 
     //generate uuid token
