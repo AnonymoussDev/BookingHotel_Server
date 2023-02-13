@@ -9,7 +9,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,8 +24,7 @@ public class User extends DateAuditing {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Email
-  @Column(unique = true, nullable = false)
+  @Column(nullable = false)
   private String email;
 
   @Column(nullable = false)

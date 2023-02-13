@@ -8,7 +8,6 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -22,7 +21,7 @@ public class VerificationToken {
 
   @Type(type = "uuid-char")
   @Column(updatable = false, unique = true, nullable = false, columnDefinition = "CHAR(36)")
-  private UUID token;
+  private String token;
 
   @Column(nullable = false)
   private Date expirationTime;
@@ -31,7 +30,7 @@ public class VerificationToken {
   @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "FK_USER_TOKEN"))
   private User user;
 
-  public VerificationToken(User user, UUID token) {
+  public VerificationToken(User user, String token) {
     super();
     this.user = user;
     this.token = token;
