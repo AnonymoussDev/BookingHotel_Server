@@ -55,7 +55,7 @@ public class User extends DateAuditing {
   @Column(nullable = false)
   private String address;
 
-  @Column(columnDefinition = "boolean default false")
+  @Column(nullable = false)
   private Boolean status;
 
   //Link to table Role
@@ -67,5 +67,12 @@ public class User extends DateAuditing {
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
   @JsonIgnore
   private Set<Post> posts = new HashSet<>();
+
+  @PrePersist
+  public void prePersist() {
+    if (this.status == null) {
+      this.status = Boolean.FALSE;
+    }
+  }
 
 }

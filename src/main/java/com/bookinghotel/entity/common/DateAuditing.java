@@ -22,7 +22,7 @@ public abstract class DateAuditing {
   private Instant createdDate;
 
   @LastModifiedDate
-  @Column(nullable = false )
+  @Column(nullable = false)
   private Instant lastModifiedDate;
 
 }
