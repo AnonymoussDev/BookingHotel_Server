@@ -118,7 +118,6 @@ public class AuthServiceImpl implements AuthService {
   public CommonResponseDTO forgotPassword(String email) {
     Optional<User> user = userRepository.findByEmail(email);
     checkNotFoundUserByEmail(user, email);
-    checkAccountNotEnabled(user.get());
 
     //generate uuid token
     UUID token = UUID.randomUUID();
@@ -177,12 +176,6 @@ public class AuthServiceImpl implements AuthService {
   private void checkAccountNotEqualTokenVerify(User user, VerificationToken token) {
     if(!Objects.equals(user.getId(), token.getUser().getId())) {
       throw new InvalidException(ErrorMessage.Auth.INCORRECT_TOKEN);
-    }
-  }
-
-  private void checkAccountNotEnabled(User user) {
-    if (user.getEnabled().equals(Boolean.FALSE)) {
-      throw new UnauthorizedException(ErrorMessage.Auth.ERR_ACCOUNT_NOT_ENABLED);
     }
   }
 
