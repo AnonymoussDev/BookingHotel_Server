@@ -14,15 +14,17 @@ public class ErrorMessage {
   public static final String INVALID_DATE = "Invalid time";
   public static final String INVALID_FORMAT_SOME_THING_FIELD = "Invalid format";
 
-  //error token
-  public static final String INVALID_TOKEN = "Invalid token";
-  public static final String EXPIRED_TOKEN = "Token has expired";
-
   public static class Auth {
+
     public static final String ERR_INCORRECT_AUTHENTICATION = "Username or password incorrect";
     public static final String ERR_DUPLICATE_EMAIL = "Email is already taken";
     public static final String ERR_DUPLICATE_PASSWORD = "The new password must be different from the old password";
     public static final String ERR_ACCOUNT_NOT_ENABLED = "This account is not enabled";
+
+    //error token verification
+    public static final String INVALID_TOKEN = "Invalid token";
+    public static final String EXPIRED_TOKEN = "Token has expired";
+    public static final String INCORRECT_TOKEN = "Incorrect token";
   }
 
   public static class User {

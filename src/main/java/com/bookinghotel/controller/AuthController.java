@@ -51,19 +51,15 @@ public class AuthController {
     return VsResponseUtil.ok(authService.forgotPassword(email));
   }
 
-  @ApiOperation("(2) API verify token forgot password")
+  @ApiOperation("(2) API verify forgot password")
   @PostMapping(UrlConstant.Auth.VERIFY_FORGOT_PASS)
-  public ResponseEntity<?> verifyTokenResetPass(@RequestParam(name = "token") String token) {
-    return VsResponseUtil.ok(authService.verifyPasswordResetToken(token));
-  }
-
-  @ApiOperation("(3) API confirm forgot password")
-  @PostMapping(UrlConstant.Auth.CONFIRM_FORGOT_PASS)
-  public ResponseEntity<?> forgotPassword(@RequestParam(name = "token") String token,
+  public ResponseEntity<?> forgotPassword(@Email(message = ErrorMessage.INVALID_FORMAT_SOME_THING_FIELD)
+                                          @RequestParam("email") String email,
+                                          @RequestParam(name = "token") String token,
                                           @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{8,}$",
                                               message = ErrorMessage.INVALID_FORMAT_PASSWORD)
                                           @RequestParam(name = "password") String newPassword) {
-    return VsResponseUtil.ok(authService.confirmForgotPassword(token, newPassword));
+    return VsResponseUtil.ok(authService.verifyForgotPassword(email, token, newPassword));
   }
 
 }

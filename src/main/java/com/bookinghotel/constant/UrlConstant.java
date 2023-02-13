@@ -12,7 +12,6 @@ public class UrlConstant {
 
     public static final String FORGOT_PASS = PRE_FIX + "/forgot-password";
     public static final String VERIFY_FORGOT_PASS = FORGOT_PASS + "/verify";
-    public static final String CONFIRM_FORGOT_PASS = FORGOT_PASS + "/confirm";
 
     private Auth() {
     }

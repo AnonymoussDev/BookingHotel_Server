@@ -142,25 +142,21 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public CommonResponseDTO verifyPasswordResetToken(String token) {
-    VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
-    checkVerificationToken(verificationToken);
-    return new CommonResponseDTO(CommonConstant.TRUE, CommonConstant.EMPTY_STRING);
-  }
-
-  @Override
-  public CommonResponseDTO confirmForgotPassword(String token, String newPassword) {
+  public CommonResponseDTO verifyForgotPassword(String email, String token, String newPassword) {
+    Optional<User> user = userRepository.findByEmail(email);
+    checkNotFoundUserByEmail(user, email);
     VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
     checkVerificationToken(verificationToken);
 
-    User user = verificationToken.getUser();
-    if (passwordEncoder.matches(newPassword, user.getPassword())) {
+    checkAccountNotEqualTokenVerify(user.get(), verificationToken);
+    if (passwordEncoder.matches(newPassword, user.get().getPassword())) {
       throw new DuplicateException(ErrorMessage.Auth.ERR_DUPLICATE_PASSWORD);
     }
 
     try {
-      user.setPassword(passwordEncoder.encode(newPassword));
-      userRepository.save(user);
+      user.get().setPassword(passwordEncoder.encode(newPassword));
+      userRepository.save(user.get());
+      verificationTokenRepository.delete(verificationToken);
       return new CommonResponseDTO(CommonConstant.TRUE, CommonMessage.FORGOT_PASSWORD_SUCCESS);
     } catch (Exception ex) {
       throw new InternalServerException(ErrorMessage.ERR_EXCEPTION_GENERAL);
@@ -169,12 +165,18 @@ public class AuthServiceImpl implements AuthService {
 
   private void checkVerificationToken(VerificationToken verificationToken) {
     if (verificationToken == null) {
-      throw new InvalidException(ErrorMessage.INVALID_TOKEN);
+      throw new InvalidException(ErrorMessage.Auth.INVALID_TOKEN);
     } else {
       Calendar cal = Calendar.getInstance();
       if ((verificationToken.getExpirationTime().getTime() - cal.getTime().getTime()) <= 0) {
-        throw new InvalidException(ErrorMessage.EXPIRED_TOKEN);
+        throw new InvalidException(ErrorMessage.Auth.EXPIRED_TOKEN);
       }
+    }
+  }
+
+  private void checkAccountNotEqualTokenVerify(User user, VerificationToken token) {
+    if(!Objects.equals(user.getId(), token.getUser().getId())) {
+      throw new InvalidException(ErrorMessage.Auth.INCORRECT_TOKEN);
     }
   }
 

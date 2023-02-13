@@ -15,8 +15,6 @@ public interface AuthService {
 
   CommonResponseDTO forgotPassword(String email);
 
-  CommonResponseDTO verifyPasswordResetToken(String token);
-
-  CommonResponseDTO confirmForgotPassword(String token, String newPassword);
+  CommonResponseDTO verifyForgotPassword(String email, String token, String newPassword);
 
 }
