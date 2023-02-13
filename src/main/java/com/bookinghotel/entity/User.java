@@ -56,7 +56,7 @@ public class User extends DateAuditing {
   private String address;
 
   @Column(nullable = false)
-  private Boolean status;
+  private Boolean enabled;
 
   //Link to table Role
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -70,8 +70,8 @@ public class User extends DateAuditing {
 
   @PrePersist
   public void prePersist() {
-    if (this.status == null) {
-      this.status = Boolean.FALSE;
+    if (this.enabled == null) {
+      this.enabled = Boolean.FALSE;
     }
   }
 
