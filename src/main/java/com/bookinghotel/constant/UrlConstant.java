@@ -18,4 +18,20 @@ public class UrlConstant {
 
   }
 
+  public static class Room {
+    private static final String PRE_FIX = "/room";
+
+    public static final String GET_ROOMS = PRE_FIX;
+    public static final String GET_ROOM = PRE_FIX + "/{roomId}";
+
+    public static final String CREATE_ROOM = PRE_FIX + "/create";
+
+    public static final String UPDATE_ROOM = PRE_FIX + "/update/{roomId}";
+
+    public static final String DELETE_ROOM = PRE_FIX + "/delete/{roomId}";
+
+    private Room() {
+    }
+  }
+
 }

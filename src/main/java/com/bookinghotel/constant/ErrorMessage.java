@@ -33,4 +33,9 @@ public class ErrorMessage {
     public static final String ERR_ACCOUNT_NOT_FOUND_BY_EMAIL = "User not found with email: %s";
   }
 
+  public static class Room {
+    public static final String ERR_NOT_FOUND_ID = "Room not found with id: %s";
+    public static final String ERR_NO_PHOTO = "Room needs a photo to describe";
+  }
+
 }

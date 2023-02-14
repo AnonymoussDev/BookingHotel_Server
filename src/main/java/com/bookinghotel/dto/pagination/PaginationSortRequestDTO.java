@@ -6,12 +6,14 @@ import com.bookinghotel.constant.SortByDataConstant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Pattern;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class PaginationSortRequestDTO extends PaginationRequestDTO {
 
   private String sortBy = CommonConstant.EMPTY_STRING;

@@ -1,5 +1,6 @@
 package com.bookinghotel.entity;
 
+import com.bookinghotel.constant.RoomType;
 import com.bookinghotel.entity.common.UserDateAuditing;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,8 @@ public class Room extends UserDateAuditing {
   private Long price;
 
   @Column(nullable = false)
-  private Integer type;
+  @Enumerated(EnumType.STRING)
+  private RoomType type;
 
   @Column(nullable = false)
   private Integer maxNum;
