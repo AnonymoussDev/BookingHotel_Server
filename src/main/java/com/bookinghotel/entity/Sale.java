@@ -25,7 +25,10 @@ public class Sale extends UserDateAuditing {
   private Long id;
 
   @Column(nullable = false)
-  private Instant applyMonth;
+  private Instant dayStart;
+
+  @Column(nullable = false)
+  private Instant dayEnd;
 
   @Column(nullable = false)
   private Integer salePercent;
