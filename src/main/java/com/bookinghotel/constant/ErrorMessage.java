@@ -38,4 +38,8 @@ public class ErrorMessage {
     public static final String ERR_NO_PHOTO = "Room needs a photo to describe";
   }
 
+  public static class Sale {
+    public static final String ERR_NOT_FOUND_ID = "Sale not found with id: %s";
+  }
+
 }
