@@ -50,4 +50,20 @@ public class UrlConstant {
     }
   }
 
+  public static class Post {
+    private static final String PRE_FIX = "/post";
+
+    public static final String GET_POSTS = PRE_FIX;
+    public static final String GET_POST = PRE_FIX + "/{postId}";
+
+    public static final String CREATE_POST = PRE_FIX + "/create";
+
+    public static final String UPDATE_POST = PRE_FIX + "/update/{postId}";
+
+    public static final String DELETE_POST = PRE_FIX + "/delete/{postId}";
+
+    private Post() {
+    }
+  }
+
 }

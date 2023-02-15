@@ -17,8 +17,4 @@ public class LastModifiedByDTO {
 
   private String lastName;
 
-  private String avatarUrl;
-
-  private Boolean status;
-
 }

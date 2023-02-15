@@ -11,10 +11,12 @@ public class FileValidator implements ConstraintValidator<ValidFile, List<Multip
 
   @Override
   public boolean isValid(List<MultipartFile> files, ConstraintValidatorContext constraintValidatorContext) {
-    for(MultipartFile multipartFile : files) {
-      String contentType = multipartFile.getContentType();
-      if (contentType != null && !isSupportedContentType(contentType)) {
-        return false;
+    if(files != null) {
+      for(MultipartFile multipartFile : files) {
+        String contentType = multipartFile.getContentType();
+        if (contentType != null && !isSupportedContentType(contentType)) {
+          return false;
+        }
       }
     }
     return true;

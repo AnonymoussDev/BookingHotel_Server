@@ -1,5 +1,6 @@
 package com.bookinghotel.config;
 
+import com.bookinghotel.security.UserPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,6 +29,7 @@ public class Swagger2Config {
         .apiInfo(apiEndPointsInfo())
         .securityContexts(List.of(securityContext()))
         .securitySchemes(List.of(apiKey()))
+        .ignoredParameterTypes(UserPrincipal.class)
         .select()
         .apis(RequestHandlerSelectors.basePackage("com.bookinghotel.controller"))
         .paths(PathSelectors.regex("/.*"))

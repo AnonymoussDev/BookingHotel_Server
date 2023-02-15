@@ -6,11 +6,24 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface MediaRepository extends JpaRepository<Media, Long> {
 
   @Query("SELECT m FROM Media m WHERE m.room.id = ?1 AND m.deleteFlag = false")
   List<Media> findByRoomId(Long roomId);
+
+  @Query("SELECT m FROM Media m WHERE m.room.id = ?1 AND m.deleteFlag = false")
+  Set<Media> findByRoomToSet(Long postId);
+
+  @Query("SELECT m FROM Media m WHERE m.post.id = ?1 AND m.deleteFlag = false")
+  List<Media> findByPostId(Long postId);
+
+  @Query("SELECT m FROM Media m WHERE m.post.id = ?1 AND m.deleteFlag = false")
+  Set<Media> findByPostToSet(Long postId);
+
+  @Query("SELECT m FROM Media m WHERE m.post.id = ?1 AND m NOT IN ?2 AND m.deleteFlag = false")
+  List<Media> findByPostIdAndNotInMedia(Long postId, List<Media> list);
 
 }

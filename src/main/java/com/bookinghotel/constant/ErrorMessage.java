@@ -42,4 +42,8 @@ public class ErrorMessage {
     public static final String ERR_NOT_FOUND_ID = "Sale not found with id: %s";
   }
 
+  public static class Post {
+    public static final String ERR_NOT_FOUND_ID = "Post not found with id: %s";
+  }
+
 }
