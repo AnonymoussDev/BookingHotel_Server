@@ -50,4 +50,8 @@ public class ErrorMessage {
     public static final String ERR_NOT_FOUND_ID = "Product not found with id: %s";
   }
 
+  public static class Category {
+    public static final String ERR_NOT_FOUND_ID = "Category not found with id: %s";
+  }
+
 }

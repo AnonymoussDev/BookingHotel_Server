@@ -12,6 +12,9 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+  @Query("SELECT p FROM Product p WHERE p.deleteFlag = false")
+  Page<Product> findAll(Pageable pageable);
+
   @Query("SELECT p FROM Product p WHERE p.id = ?1 AND p.deleteFlag = false")
   Optional<Product> findById(Long id);
 
