@@ -36,14 +36,20 @@ public class RoomController {
 
   @ApiOperation("API create room")
   @PostMapping(UrlConstant.Room.CREATE_ROOM)
-  public ResponseEntity<?> updateRoomById(@Valid RoomCreateDTO createDTO) {
-    return VsResponseUtil.ok(roomService.createRoom(createDTO));
+  public ResponseEntity<?> updateRoomById(@Valid RoomCreateDTO roomCreateDTO) {
+    return VsResponseUtil.ok(roomService.createRoom(roomCreateDTO));
   }
 
   @ApiOperation("API update room by id")
   @PutMapping(UrlConstant.Room.UPDATE_ROOM)
-  public ResponseEntity<?> updateRoomById(@PathVariable Long roomId, @Valid RoomUpdateDTO updateDTO) {
-    return VsResponseUtil.ok(roomService.updateRoom(roomId, updateDTO));
+  public ResponseEntity<?> updateRoomById(@PathVariable Long roomId, @Valid RoomUpdateDTO roomUpdateDTO) {
+    return VsResponseUtil.ok(roomService.updateRoom(roomId, roomUpdateDTO));
+  }
+
+  @ApiOperation("API delete room by id")
+  @DeleteMapping(UrlConstant.Room.DELETE_ROOM)
+  public ResponseEntity<?> deleteRoomById(@PathVariable Long roomId) {
+    return VsResponseUtil.ok(roomService.deleteRoom(roomId));
   }
 
 }

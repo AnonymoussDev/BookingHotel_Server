@@ -17,6 +17,7 @@ import com.bookinghotel.entity.Room;
 import com.bookinghotel.exception.InternalServerException;
 import com.bookinghotel.exception.InvalidException;
 import com.bookinghotel.exception.NotFoundException;
+import com.bookinghotel.mapper.MediaMapper;
 import com.bookinghotel.mapper.RoomMapper;
 import com.bookinghotel.repository.MediaRepository;
 import com.bookinghotel.repository.RoomRepository;
@@ -42,12 +43,15 @@ public class RoomServiceImpl implements RoomService {
 
   private final RoomMapper roomMapper;
 
+  private final MediaMapper mediaMapper;
+
   private final UploadFileUtil uploadFile;
 
   @Override
   public RoomDTO getRoom(Long roomId) {
     Optional<Room> room = roomRepository.findById(roomId);
     checkNotFoundRoomById(room, roomId);
+    room.get().setMedias(mediaRepository.findByRoomToSet(roomId));
     return roomMapper.toRoomDTO(room.get());
   }
 
@@ -76,23 +80,26 @@ public class RoomServiceImpl implements RoomService {
     Optional<Room> currentRoom = roomRepository.findById(roomId);
     checkNotFoundRoomById(currentRoom, roomId);
 
-    //Delete media if url not found in mediaDTO
-    if(CollectionUtils.isEmpty(roomUpdateDTO.getMedias())) {
-      throw new InvalidException(ErrorMessage.Room.ERR_NO_PHOTO);
-    } else {
-      List<Media> medias = mediaRepository.findByRoomId(roomId);
-      for(Media media : medias) {
-        for (MediaDTO mediaDTO : roomUpdateDTO.getMedias()) {
-          if(!Objects.equals(media.getId(), mediaDTO.getId())) {
-            mediaRepository.delete(media);
-          }
-        }
+    //Delete media if not found in mediaDTO
+    if(CollectionUtils.isNotEmpty(roomUpdateDTO.getMedias())) {
+      List<Media> medias = mediaMapper.toMedias(roomUpdateDTO.getMedias());
+      List<Media> mediaDeleteFlag = mediaRepository.findByRoomIdAndNotInMedia(roomId, medias);
+      if (CollectionUtils.isNotEmpty(mediaDeleteFlag)) {
+        mediaDeleteFlag.forEach(item -> {
+          item.setDeleteFlag(CommonConstant.TRUE);
+          mediaRepository.save(item);
+        });
       }
+    } else {
+      throw new InvalidException(ErrorMessage.Room.ERR_NO_PHOTO);
     }
-    roomMapper.updateRoomFromDTO(roomUpdateDTO, currentRoom.get());
+    //add file if exist
     if(roomUpdateDTO.getFiles() != null) {
       currentRoom.get().getMedias().addAll(toMedias(currentRoom.get(), roomUpdateDTO.getFiles()));
     }
+
+    roomMapper.updateRoomFromDTO(roomUpdateDTO, currentRoom.get());
+    currentRoom.get().setMedias(mediaRepository.findByRoomToSet(roomId));
     return roomMapper.toRoomDTO(roomRepository.save(currentRoom.get()));
   }
 
@@ -102,6 +109,14 @@ public class RoomServiceImpl implements RoomService {
     checkNotFoundRoomById(currentRoom, roomId);
     try {
       currentRoom.get().setDeleteFlag(CommonConstant.TRUE);
+      //set deleteFlag Media
+      List<Media> mediaDeleteFlag = mediaRepository.findByRoomId(roomId);
+      if (CollectionUtils.isNotEmpty(mediaDeleteFlag)) {
+        mediaDeleteFlag.forEach(item -> {
+          item.setDeleteFlag(CommonConstant.TRUE);
+          mediaRepository.save(item);
+        });
+      }
       roomRepository.save(currentRoom.get());
       return new CommonResponseDTO(CommonConstant.TRUE, CommonMessage.DELETE_SUCCESS);
     } catch (Exception e) {
