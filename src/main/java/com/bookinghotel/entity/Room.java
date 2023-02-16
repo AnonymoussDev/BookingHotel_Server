@@ -42,6 +42,9 @@ public class Room extends UserDateAuditing {
   @Column(nullable = false)
   private Integer floor;
 
+  @Column(nullable = false)
+  private Boolean status;
+
   @Lob
   @Nationalized
   @Column(nullable = false)
@@ -61,5 +64,12 @@ public class Room extends UserDateAuditing {
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "room")
   @JsonIgnore
   private Set<BookingDetail> bookingDetails = new HashSet<>();
+
+  @PrePersist
+  public void prePersist() {
+    if (this.status == null) {
+      this.status = Boolean.FALSE;
+    }
+  }
 
 }
