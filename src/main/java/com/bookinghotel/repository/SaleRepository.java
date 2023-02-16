@@ -20,4 +20,5 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
       countQuery = "SELECT COUNT(*) FROM sales s WHERE (:keyword is null or s.sale_percent LIKE CONCAT('%', :keyword, '%')) AND s.delete_flag = 0",
       nativeQuery = true)
   Page<Sale> findAllByKey(@Param("keyword") String keyword, Pageable pageable);
+
 }

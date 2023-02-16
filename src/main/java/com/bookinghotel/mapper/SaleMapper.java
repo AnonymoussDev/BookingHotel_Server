@@ -14,10 +14,10 @@ public interface SaleMapper {
 
   SaleDTO toSaleDTO(Sale sale);
 
-  List<SaleDTO> toSaleDTOs(List<Sale> rooms);
+  List<SaleDTO> toSaleDTOs(List<Sale> sales);
 
   Sale createDtoToSale(SaleCreateDTO createDTO);
 
-  void updateSaleFromDTO(SaleUpdateDTO updateDTO, @MappingTarget Sale room);
+  void updateSaleFromDTO(SaleUpdateDTO updateDTO, @MappingTarget Sale sale);
 
 }

@@ -10,10 +10,7 @@ import com.bookinghotel.service.SaleService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -37,14 +34,20 @@ public class SaleController {
 
   @ApiOperation("API create sale")
   @PostMapping(UrlConstant.Sale.CREATE_SALE)
-  public ResponseEntity<?> updateSaleById(@Valid SaleCreateDTO createDTO) {
-    return VsResponseUtil.ok(saleService.createSale(createDTO));
+  public ResponseEntity<?> updateSaleById(@Valid SaleCreateDTO saleCreateDTO) {
+    return VsResponseUtil.ok(saleService.createSale(saleCreateDTO));
   }
 
   @ApiOperation("API update sale by id")
   @PutMapping(UrlConstant.Sale.UPDATE_SALE)
-  public ResponseEntity<?> updateSaleById(@PathVariable Long saleId, @Valid SaleUpdateDTO updateDTO) {
-    return VsResponseUtil.ok(saleService.updateSale(saleId, updateDTO));
+  public ResponseEntity<?> updateSaleById(@PathVariable Long saleId, @Valid SaleUpdateDTO saleUpdateDTO) {
+    return VsResponseUtil.ok(saleService.updateSale(saleId, saleUpdateDTO));
+  }
+
+  @ApiOperation("API delete sale by id")
+  @DeleteMapping(UrlConstant.Sale.DELETE_SALE)
+  public ResponseEntity<?> deleteSaleById(@PathVariable Long saleId) {
+    return VsResponseUtil.ok(saleService.deleteSale(saleId));
   }
 
 }
