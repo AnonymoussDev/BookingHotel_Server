@@ -9,8 +9,6 @@ import com.bookinghotel.dto.pagination.PaginationSortRequestDTO;
 import com.bookinghotel.security.CurrentUserLogin;
 import com.bookinghotel.security.UserPrincipal;
 import com.bookinghotel.service.PostService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +36,14 @@ public class PostController {
 
   @ApiOperation("API create post")
   @PostMapping(UrlConstant.Post.CREATE_POST)
-  public ResponseEntity<?> createPostById(@Valid PostCreateDTO createDTO, @CurrentUserLogin UserPrincipal principal) {
-    return VsResponseUtil.ok(postService.createPost(createDTO, principal));
+  public ResponseEntity<?> createPostById(@Valid PostCreateDTO postCreateDTO, @CurrentUserLogin UserPrincipal principal) {
+    return VsResponseUtil.ok(postService.createPost(postCreateDTO, principal));
   }
 
   @ApiOperation(value = "API update post by id")
   @PutMapping(UrlConstant.Post.UPDATE_POST)
-  public ResponseEntity<?> updateRoomById(@PathVariable Long postId, @Valid @RequestBody PostUpdateDTO updateDTO) {
-    return VsResponseUtil.ok(postService.updatePost(postId, updateDTO));
+  public ResponseEntity<?> updatePostById(@PathVariable Long postId, @Valid @RequestBody PostUpdateDTO postUpdateDTO) {
+    return VsResponseUtil.ok(postService.updatePost(postId, postUpdateDTO));
   }
 
   @ApiOperation("API delete post by id")
