@@ -50,6 +50,6 @@ public class Product extends UserDateAuditing {
   //Link to table Media
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
   @JsonIgnore
-  private Set<Media> media = new HashSet<>();
+  private Set<Media> medias = new HashSet<>();
 
 }
