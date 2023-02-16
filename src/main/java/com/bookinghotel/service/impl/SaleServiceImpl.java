@@ -44,11 +44,11 @@ public class SaleServiceImpl implements SaleService {
   @Override
   public PaginationResponseDTO<SaleDTO> getSales(PaginationSearchSortRequestDTO requestDTO) {
     //Pagination
-    Pageable pageable = PaginationUtil.buildPageable(requestDTO, SortByDataConstant.ROOM);
+    Pageable pageable = PaginationUtil.buildPageable(requestDTO, SortByDataConstant.SALE);
     Page<Sale> sales = saleRepository.findAllByKey(requestDTO.getKeyword(), pageable);
 
     //Create Output
-    PagingMeta meta = PaginationUtil.buildPagingMeta(requestDTO, SortByDataConstant.ROOM, sales);
+    PagingMeta meta = PaginationUtil.buildPagingMeta(requestDTO, SortByDataConstant.SALE, sales);
     List<SaleDTO> saleDTOs = saleMapper.toSaleDTOs(sales.getContent());
     return new PaginationResponseDTO<SaleDTO>(meta, saleDTOs);
   }
