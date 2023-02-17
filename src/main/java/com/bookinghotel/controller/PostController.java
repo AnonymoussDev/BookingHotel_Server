@@ -9,8 +9,10 @@ import com.bookinghotel.dto.pagination.PaginationSortRequestDTO;
 import com.bookinghotel.security.CurrentUserLogin;
 import com.bookinghotel.security.UserPrincipal;
 import com.bookinghotel.service.PostService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,31 +24,33 @@ public class PostController {
 
   private final PostService postService;
 
-  @ApiOperation("API get post by id")
+  @Operation(summary = "API get post by id")
   @GetMapping(UrlConstant.Post.GET_POST)
   public ResponseEntity<?> getPostById(@PathVariable Long postId) {
     return VsResponseUtil.ok(postService.getPost(postId));
   }
 
-  @ApiOperation("API get all post")
+  @Operation(summary = "API get all post")
   @GetMapping(UrlConstant.Post.GET_POSTS)
   public ResponseEntity<?> getPosts(@Valid PaginationSortRequestDTO requestDTO) {
     return VsResponseUtil.ok(postService.getPosts(requestDTO));
   }
 
-  @ApiOperation("API create post")
-  @PostMapping(UrlConstant.Post.CREATE_POST)
-  public ResponseEntity<?> createPostById(@Valid PostCreateDTO postCreateDTO, @CurrentUserLogin UserPrincipal principal) {
+  @Operation(summary = "API create post")
+  @Parameter(name = "principal", hidden = true)
+  @PostMapping(value = UrlConstant.Post.CREATE_POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<?> createPostById(@Valid @ModelAttribute PostCreateDTO postCreateDTO,
+                                          @CurrentUserLogin UserPrincipal principal) {
     return VsResponseUtil.ok(postService.createPost(postCreateDTO, principal));
   }
 
-  @ApiOperation(value = "API update post by id")
-  @PutMapping(UrlConstant.Post.UPDATE_POST)
-  public ResponseEntity<?> updatePostById(@PathVariable Long postId, @Valid @RequestBody PostUpdateDTO postUpdateDTO) {
+  @Operation(summary = "API update post by id")
+  @PutMapping(value = UrlConstant.Post.UPDATE_POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<?> updatePostById(@PathVariable Long postId, @Valid @ModelAttribute PostUpdateDTO postUpdateDTO) {
     return VsResponseUtil.ok(postService.updatePost(postId, postUpdateDTO));
   }
 
-  @ApiOperation("API delete post by id")
+  @Operation(summary = "API delete post by id")
   @DeleteMapping(UrlConstant.Post.DELETE_POST)
   public ResponseEntity<?> deletePostById(@PathVariable Long postId) {
     return VsResponseUtil.ok(postService.deletePost(postId));
