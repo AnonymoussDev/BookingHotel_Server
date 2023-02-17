@@ -11,12 +11,14 @@ import com.bookinghotel.dto.common.CommonResponseDTO;
 import com.bookinghotel.dto.pagination.PaginationResponseDTO;
 import com.bookinghotel.dto.pagination.PaginationSearchSortRequestDTO;
 import com.bookinghotel.dto.pagination.PagingMeta;
+import com.bookinghotel.entity.Category;
 import com.bookinghotel.entity.Media;
 import com.bookinghotel.entity.Product;
 import com.bookinghotel.exception.InternalServerException;
 import com.bookinghotel.exception.NotFoundException;
 import com.bookinghotel.mapper.MediaMapper;
 import com.bookinghotel.mapper.ProductMapper;
+import com.bookinghotel.repository.CategoryRepository;
 import com.bookinghotel.repository.MediaRepository;
 import com.bookinghotel.repository.ProductRepository;
 import com.bookinghotel.service.ProductService;
@@ -24,6 +26,7 @@ import com.bookinghotel.util.PaginationUtil;
 import com.bookinghotel.util.UploadFileUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +43,8 @@ import java.util.Set;
 public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
+
+  private final CategoryRepository categoryRepository;
 
   private final MediaRepository mediaRepository;
 
@@ -90,6 +95,8 @@ public class ProductServiceImpl implements ProductService {
     if (productCreateDTO.getProductImageFile() != null) {
       product.setMedias(toMedias(product, productCreateDTO.getProductImageFile()));
     }
+    Category category = categoryRepository.findById(productCreateDTO.getCategoryId()).orElse(null);
+    product.setCategory(category);
     return productMapper.toProductDTO(productRepository.save(product));
   }
 
@@ -125,7 +132,12 @@ public class ProductServiceImpl implements ProductService {
     if(StringUtils.isEmpty(productUpdateDTO.getThumbnail()) && productUpdateDTO.getThumbnailFile() != null) {
       currentProduct.get().setThumbnail(uploadFile.getUrlFromFile(productUpdateDTO.getThumbnailFile()));
     }
-
+    //update category
+    if(ObjectUtils.isNotEmpty(currentProduct.get().getCategory())
+        && !currentProduct.get().getCategory().getId().equals(productUpdateDTO.getCategoryId())) {
+      Category category = categoryRepository.findById(productUpdateDTO.getCategoryId()).orElse(null);
+      currentProduct.get().setCategory(category);
+    }
     productMapper.updateProductFromDTO(productUpdateDTO, currentProduct.get());
     currentProduct.get().setMedias(mediaRepository.findByProductToSet(productId));
     return productMapper.toProductDTO(productRepository.save(currentProduct.get()));

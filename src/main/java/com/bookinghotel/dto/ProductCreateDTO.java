@@ -32,4 +32,6 @@ public class ProductCreateDTO {
   @ValidFile
   private List<MultipartFile> productImageFile;
 
+  private Long categoryId;
+
 }

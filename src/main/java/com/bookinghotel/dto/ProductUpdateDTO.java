@@ -36,4 +36,6 @@ public class ProductUpdateDTO {
   @ValidFile
   private List<MultipartFile> productImageFile;
 
+  private Long categoryId;
+
 }
