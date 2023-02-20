@@ -11,6 +11,4 @@ public abstract class UserDateAuditingDTO extends DateAuditingDTO {
 
   private Long lastModifiedBy;
 
-  private Boolean deleteFlag;
-
 }

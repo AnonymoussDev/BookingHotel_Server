@@ -24,7 +24,4 @@ public abstract class UserDateAuditing extends DateAuditing {
   @Column(nullable = false)
   private Long lastModifiedBy;
 
-  @Column(nullable = false)
-  private Boolean deleteFlag = Boolean.FALSE;
-
 }

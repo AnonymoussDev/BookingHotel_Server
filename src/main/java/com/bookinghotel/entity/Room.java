@@ -1,7 +1,7 @@
 package com.bookinghotel.entity;
 
 import com.bookinghotel.constant.RoomType;
-import com.bookinghotel.entity.common.UserDateAuditing;
+import com.bookinghotel.entity.common.FlagUserDateAuditing;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "rooms")
-public class Room extends UserDateAuditing {
+public class Room extends FlagUserDateAuditing {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

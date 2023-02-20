@@ -1,6 +1,6 @@
 package com.bookinghotel.entity;
 
-import com.bookinghotel.entity.common.UserDateAuditing;
+import com.bookinghotel.entity.common.FlagUserDateAuditing;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "posts")
-public class Post extends UserDateAuditing {
+public class Post extends FlagUserDateAuditing {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

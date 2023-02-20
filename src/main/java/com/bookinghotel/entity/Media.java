@@ -1,7 +1,6 @@
 package com.bookinghotel.entity;
 
-import com.bookinghotel.entity.common.UserDateAuditing;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.bookinghotel.entity.common.FlagUserDateAuditing;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "medias")
-public class Media extends UserDateAuditing {
+public class Media extends FlagUserDateAuditing {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +32,5 @@ public class Media extends UserDateAuditing {
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   @JoinColumn(name = "room_id", foreignKey = @ForeignKey(name = "FK_MEDIA_ROOM"))
   private Room room;
-
-  //Link to table Room
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-  @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "FK_MEDIA_PRODUCT"))
-  private Product product;
 
 }

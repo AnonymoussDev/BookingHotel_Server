@@ -34,8 +34,8 @@ public class BookingHotelApplication {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
       if (roleRepository.count() == 0) {
-        roleRepository.save(new Role(null, RoleEnum.ADMIN.getValue(), "Administrators", null));
-        roleRepository.save(new Role(null, RoleEnum.USER.getValue(), "Customer", null));
+        roleRepository.save(new Role(null, RoleEnum.ADMIN.getValue(), null));
+        roleRepository.save(new Role(null, RoleEnum.USER.getValue(), null));
       }
 
       if (userRepository.count() == 0) {

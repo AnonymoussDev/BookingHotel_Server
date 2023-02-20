@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -28,14 +29,20 @@ public class Booking extends UserDateAuditing {
 
   private Instant checkOut;
 
+  @Column(nullable = false)
+  private Integer status;
+
+  @Nationalized
+  private String note;
+
   //Link to table BookingDetail
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "booking")
   @JsonIgnore
   private Set<BookingDetail> bookingDetails = new HashSet<>();
 
-  //Link to table BookingDetail
+  //Link to table ServiceDetail
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "booking")
   @JsonIgnore
-  private Set<Service> services = new HashSet<>();
+  private Set<ServiceDetail> serviceDetails = new HashSet<>();
 
 }
