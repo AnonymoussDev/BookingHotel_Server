@@ -13,6 +13,8 @@ public interface ProductService {
 
   PaginationResponseDTO<ProductDTO> getProducts(PaginationSearchSortRequestDTO requestDTO);
 
+  PaginationResponseDTO<ProductDTO> getProductsByServiceId(Long serviceId, PaginationSearchSortRequestDTO requestDTO);
+
   ProductDTO createProduct(ProductCreateDTO productCreateDTO);
 
   ProductDTO updateProduct(Long productId, ProductUpdateDTO productUpdateDTO);

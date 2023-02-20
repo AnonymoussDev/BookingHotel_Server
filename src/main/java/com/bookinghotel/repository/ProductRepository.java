@@ -12,13 +12,19 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-  @Query("SELECT p FROM Product p WHERE p.deleteFlag = false")
-  Page<Product> findAll(Pageable pageable);
+  @Query(value = "SELECT * FROM Product p WHERE (:keyword IS NULL OR p.name LIKE CONCAT('%', :keyword, '%')) AND p.deleteFlag = 0",
+      countQuery = "SELECT COUNT(*) FROM Product p WHERE (:keyword IS NULL OR p.name LIKE CONCAT('%', :keyword, '%')) AND p.deleteFlag = 0",
+      nativeQuery = true)
+  Page<Product> findAllByKey(Pageable pageable, String keyword);
+
+  @Query(value = "SELECT * FROM Product p WHERE (:keyword IS NULL OR p.name LIKE CONCAT('%', :keyword, '%')) " +
+      "AND p.serviceId = :serviceId AND p.deleteFlag = 0",
+      countQuery = "SELECT COUNT(*) FROM Product p WHERE (:keyword IS NULL OR p.name LIKE CONCAT('%', :keyword, '%')) " +
+          "AND p.serviceId = :serviceId AND p.deleteFlag = 0",
+      nativeQuery = true)
+  Page<Product> findAllByServiceId(Pageable pageable, Long serviceId, String keyword);
 
   @Query("SELECT p FROM Product p WHERE p.id = ?1 AND p.deleteFlag = false")
   Optional<Product> findById(Long id);
-
-  @Query("SELECT p FROM Product p WHERE p.category.id = ?1 AND p.deleteFlag = false")
-  Page<Product> findAllByCategoryId(Long categoryId, Pageable pageable);
 
 }

@@ -9,9 +9,6 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.LinkedList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,22 +17,15 @@ import java.util.List;
 public class ProductUpdateDTO {
 
   @NotBlank(message = ErrorMessage.NOT_BLANK_FIELD)
-  private String title;
+  private String name;
 
   private String thumbnail;
 
+  @ValidFile
   private MultipartFile thumbnailFile;
-
-  @NotNull(message = ErrorMessage.INVALID_SOME_THING_FIELD_IS_REQUIRED)
-  private Integer price;
 
   private String description;
 
-  private List<MediaDTO> medias = new LinkedList<>();
-
-  @ValidFile
-  private List<MultipartFile> productImageFile;
-
-  private Long categoryId;
+  private Long serviceId;
 
 }

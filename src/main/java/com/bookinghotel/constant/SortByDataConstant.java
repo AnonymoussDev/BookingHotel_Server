@@ -1,6 +1,24 @@
 package com.bookinghotel.constant;
 
 public enum SortByDataConstant implements SortByInterface {
+
+  SALE {
+    @Override
+    public String getSortBy(String sortBy) {
+      switch (sortBy) {
+        case "dayStart":
+          return "day_start";
+        case "dayEnd":
+          return "day_end";
+        case "salePercent":
+          return "sale_percent";
+        case "lastModifiedDate":
+          return "last_modified_date";
+        default:
+          return "created_date";
+      }
+    }
+  },
   ROOM {
     @Override
     public String getSortBy(String sortBy) {
@@ -29,10 +47,12 @@ public enum SortByDataConstant implements SortByInterface {
       }
     }
   },
-  PRODUCT {
+  SERVICE {
     @Override
     public String getSortBy(String sortBy) {
       switch (sortBy) {
+        case "title":
+          return "title";
         case "price":
           return "price";
         case "lastModifiedDate":
@@ -42,16 +62,12 @@ public enum SortByDataConstant implements SortByInterface {
       }
     }
   },
-  SALE {
+  PRODUCT {
     @Override
     public String getSortBy(String sortBy) {
       switch (sortBy) {
-        case "dayStart":
-          return "day_start";
-        case "dayEnd":
-          return "day_end";
-        case "salePercent":
-          return "sale_percent";
+        case "name":
+          return "name";
         case "lastModifiedDate":
           return "last_modified_date";
         default:
@@ -59,4 +75,5 @@ public enum SortByDataConstant implements SortByInterface {
       }
     }
   },
+
 }

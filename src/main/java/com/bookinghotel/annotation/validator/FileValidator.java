@@ -5,21 +5,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.List;
+import java.util.Objects;
 
-public class FileValidator implements ConstraintValidator<ValidFile, List<MultipartFile>> {
+public class FileValidator implements ConstraintValidator<ValidFile, MultipartFile> {
 
   @Override
-  public boolean isValid(List<MultipartFile> files, ConstraintValidatorContext constraintValidatorContext) {
-    if(files != null) {
-      for(MultipartFile multipartFile : files) {
-        String contentType = multipartFile.getContentType();
-        if (contentType != null && !isSupportedContentType(contentType)) {
-          return false;
-        }
-      }
+  public boolean isValid(MultipartFile file, ConstraintValidatorContext constraintValidatorContext) {
+    boolean result = true;
+
+    String contentType = file.getContentType();
+    if (!isSupportedContentType(Objects.requireNonNull(contentType))) {
+      result = false;
     }
-    return true;
+
+    return result;
   }
 
   private boolean isSupportedContentType(String contentType) {
